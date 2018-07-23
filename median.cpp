@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <cstdlib>
+#include <ctime>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc.hpp>
@@ -104,8 +105,8 @@ int median_from36(int a[], int b[])
 	if ( a[0] > b[4] )
 		return b[4];
 	if ( a[1] > b[3] ){//median either a[0] or b[3]
-		if ( a[1] > b[3] )
-			return a[1];
+		if ( a[0] > b[3] )
+			return a[0];
 		return b[3];
 	}
 	// Now we know that median has to be in a[0-2] or b[0-2].
@@ -202,15 +203,17 @@ bool validate(cv::Mat &med_opencv, int** med){
 int main()
 {
       int n = 10000;
+      std::clock_t    start;
       int **img = (int **)malloc(n * sizeof(int *));
-      cout << "start " << endl;
 
       Mat A(n, n, CV_8UC1);
       randu(A, Scalar::all(0), Scalar::all(255));
       //     memcpy(A.data, img, n*n*sizeof(char));
 
       Mat med_opencv;
+      start = std::clock();
       medianBlur(A, med_opencv, 3);
+      std::cout << "Time OpenCV: " << (std::clock() - start) / (double)(CLOCKS_PER_SEC / 1000) << " ms" << std::endl;
 
       for (int i = 0; i < n; i++)
       {
@@ -226,7 +229,9 @@ int main()
       {
             med[i] = (int *)malloc(n * sizeof(int));
       }
+      start = std::clock();
       median2di(img, n, n, med);
+      std::cout << "Time median2di: " << (std::clock() - start) / (double)(CLOCKS_PER_SEC / 1000) << " ms" << std::endl;
 
       bool isSame = validate(med_opencv, med);
 
