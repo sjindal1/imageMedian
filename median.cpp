@@ -104,8 +104,8 @@ int median_from36(int a[], int b[])
 	if ( a[0] > b[4] )
 		return b[4];
 	if ( a[1] > b[3] ){//median either a[0] or b[3]
-		if ( a[0] > b[3] )
-			return a[0];
+		if ( a[1] > b[3] )
+			return a[1];
 		return b[3];
 	}
 	// Now we know that median has to be in a[0-2] or b[0-2].
@@ -177,10 +177,8 @@ void median2di(int **img, int m, int n, int **med)
                   sort3i(&img[i + 1][j], a[k + 1]);
                   merge_i(a[k], 3, a[k + 1], 3, b[kk]);
                   // get the first median
-                //   merge_i(b[1 - kk], 5, a[(i)&0x3], 3, c);
                   med[i - 1][j + 1] = median_from36(a[(i)&0x3], b[1-kk]);
                   // get the second median
-                //   merge_i(b[kk], 5, a[(i - 1) & 0x3], 3, c);
                   med[i][j + 1] = median_from36(a[(i-1)&0x3], b[kk]);
                   k = 2 - k;
                   kk = 1 - kk;
